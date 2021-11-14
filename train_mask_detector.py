@@ -19,6 +19,11 @@ from imutils import paths
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import tensorflow as tf
+from tensorflow.python.compiler.mlcompute import mlcompute
+
+mlcompute.set_mlc_device(device_name='gpu')
+tf.compat.v1.disable_eager_execution()
 
 # initialize the initial learning rate, number of epochs to train for,
 # and batch size
@@ -26,7 +31,7 @@ INIT_LR = 1e-4
 EPOCHS = 20
 BS = 32
 
-DIRECTORY = r"C:\Mask Detection\CODE\Face-Mask-Detection-master\dataset"
+DIRECTORY = "/Users/awais/Desktop/ML/Face-Mask-Detection/dataset"
 CATEGORIES = ["with_mask", "without_mask"]
 
 # grab the list of images in our dataset directory, then initialize
@@ -70,7 +75,7 @@ aug = ImageDataGenerator(
 
 # load the MobileNetV2 network, ensuring the head FC layer sets are
 # left off
-baseModel = MobileNetV2(weights="imagenet", include_top=False,
+baseModel = MobileNetV2(weights='imagenet', include_top=False,
 	input_tensor=Input(shape=(224, 224, 3)))
 
 # construct the head of the model that will be placed on top of the
@@ -120,7 +125,7 @@ print(classification_report(testY.argmax(axis=1), predIdxs,
 
 # serialize the model to disk
 print("[INFO] saving mask detector model...")
-model.save("mask_detector.model", save_format="h5")
+model.save("NMT_model_weight.model", save_format="h5")
 
 # plot the training loss and accuracy
 N = EPOCHS
